@@ -166,9 +166,13 @@ namespace AthamePlugin.Tidal
             throw new NotImplementedException();
         }
 
-        public override Task<Artist> GetArtistInfoAsync(string artistId)
+        public override async Task<Artist> GetArtistInfoAsync(string artistId)
         {
-            throw new NotImplementedException();
+            var artist = await client.GetArtistAsync(Int32.Parse(artistId));
+            return new Artist
+            {
+                Name = artist.Name
+            };
         }
 
         public override PagedMethod<Track> GetArtistTopTracks(string artistId, int itemsPerPage)
@@ -178,7 +182,8 @@ namespace AthamePlugin.Tidal
 
         public override PagedMethod<Album> GetArtistAlbums(string artistId, int itemsPerPage)
         {
-            throw new NotImplementedException();
+            var itemsPages = client.GetArtistAlbums(Int32.Parse(artistId));
+            return new AthameAlbumPagedMethod(settings, itemsPages);
         }
 
         public override async Task<Album> GetAlbumAsync(string albumId, bool withTracks)
